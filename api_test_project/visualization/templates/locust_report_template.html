@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        .timestamp {
+            color: #7f8c8d;
+            font-size: 0.9em;
+            text-align: center;
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        .chart-container {
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        .chart-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .chart-box {
+            flex: 1;
+            min-width: 45%;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            overflow: hidden;
+        }
+        @media (max-width: 768px) {
+            .chart-box {
+                min-width: 100%;
+            }
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        .metrics-summary {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .metric-card {
+            flex: 1;
+            min-width: 150px;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            background-color: #f8f9fa;
+        }
+        .metric-card .value {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin: 10px 0;
+        }
+        .metric-card .label {
+            font-size: 0.9em;
+            color: #7f8c8d;
+        }
+        .threshold-warning {
+            background-color: #fff3cd;
+            color: #856404;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .threshold-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .distribution-chart {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fcfcfc;
+            border-radius: 8px;
+        }
+        .percentile-table {
+            width: 100%;
+            margin-top: 15px;
+        }
+        .percentile-table th {
+            background-color: #eef2f7;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>{{ title }}</h1>
+            <div class="timestamp">生成时间: {{ timestamp }}</div>
+        </div>
+        
+        <div class="section">
+            <h2>测试信息</h2>
+            <table>
+                <tbody>
+                    {% for key, value in test_info.items() %}
+                    <tr>
+                        <th>{{ key }}</th>
+                        <td>{{ value }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        {% if metrics_summary %}
+        <div class="section">
+            <h2>性能指标摘要</h2>
+            <div class="metrics-summary">
+                {% for key, value in metrics_summary.items() %}
+                <div class="metric-card">
+                    <div class="value">{{ value }}</div>
+                    <div class="label">{{ key }}</div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        
+        {% if warnings %}
+        <div class="section">
+            <h2>性能警告</h2>
+            {% for warning in warnings %}
+            <div class="threshold-warning">
+                <strong>⚠️ 警告:</strong> {{ warning }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        {% if charts %}
+        <div class="section">
+            <h2>性能分析图表</h2>
+            
+            <div class="chart-container">
+                {% if charts.request_stats %}
+                <div class="chart-row">
+                    <div class="chart-box" style="min-width: 100%;">
+                        {{ charts.request_stats | safe }}
+                    </div>
+                </div>
+                {% endif %}
+                
+                {% if charts.response_time_history or charts.rps_users_history %}
+                <div class="chart-row">
+                    {% if charts.response_time_history %}
+                    <div class="chart-box">
+                        {{ charts.response_time_history | safe }}
+                    </div>
+                    {% endif %}
+                    
+                    {% if charts.rps_users_history %}
+                    <div class="chart-box">
+                        {{ charts.rps_users_history | safe }}
+                    </div>
+                    {% endif %}
+                </div>
+                {% endif %}
+                
+                {% if charts.failures_history or charts.success_rate_pie %}
+                <div class="chart-row">
+                    {% if charts.failures_history %}
+                    <div class="chart-box">
+                        {{ charts.failures_history | safe }}
+                    </div>
+                    {% endif %}
+                    
+                    {% if charts.success_rate_pie %}
+                    <div class="chart-box">
+                        {{ charts.success_rate_pie | safe }}
+                    </div>
+                    {% endif %}
+                </div>
+                {% endif %}
+                
+                {% if charts.response_time_distribution %}
+                <div class="distribution-chart">
+                    <h3>响应时间分布</h3>
+                    {{ charts.response_time_distribution | safe }}
+                </div>
+                {% endif %}
+                
+                {% if charts.llm_specific_metrics %}
+                <div class="chart-row">
+                    <div class="chart-box" style="min-width: 100%;">
+                        <h3>LLM特有指标</h3>
+                        {{ charts.llm_specific_metrics | safe }}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+        
+        {% if failure_analysis %}
+        <div class="section">
+            <h2>失败分析</h2>
+            
+            {% if charts.failure_distribution %}
+            <div class="chart-box">
+                {{ charts.failure_distribution | safe }}
+            </div>
+            {% endif %}
+            
+            {% if failure_analysis.top_failures %}
+            <h3>主要失败原因</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>错误类型</th>
+                        <th>数量</th>
+                        <th>占比</th>
+                        <th>示例错误消息</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for failure in failure_analysis.top_failures %}
+                    <tr>
+                        <td>{{ failure.type }}</td>
+                        <td>{{ failure.count }}</td>
+                        <td>{{ failure.percentage }}%</td>
+                        <td>{{ failure.sample_message }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% endif %}
+        </div>
+        {% endif %}
+        
+        {% if percentile_data %}
+        <div class="section">
+            <h2>响应时间百分位</h2>
+            <table class="percentile-table">
+                <thead>
+                    <tr>
+                        <th>端点</th>
+                        <th>50%</th>
+                        <th>75%</th>
+                        <th>90%</th>
+                        <th>95%</th>
+                        <th>99%</th>
+                        <th>100%</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in percentile_data %}
+                    <tr>
+                        <td>{{ row.endpoint }}</td>
+                        <td>{{ row.p50 }}</td>
+                        <td>{{ row.p75 }}</td>
+                        <td>{{ row.p90 }}</td>
+                        <td>{{ row.p95 }}</td>
+                        <td>{{ row.p99 }}</td>
+                        <td>{{ row.p100 }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+        
+        <div class="footer">
+            <p>LLM API负载测试报告 | 生成时间: {{ timestamp }}</p>
+        </div>
+    </div>
+</body>
+</html> 
