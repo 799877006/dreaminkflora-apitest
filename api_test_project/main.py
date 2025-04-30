@@ -317,7 +317,7 @@ async def run_basic_test(
     
     # 生成测试用书籍标题
     book_titles = [
-        f"测试书籍 {user_id} - {time.strftime('%Y%m%d%H%M%S')}"
+        f"测试书籍 {user_id} - {time.strftime('%H:%M:%S')}"
         for user_id in selected_user_ids
     ]
     
@@ -500,6 +500,7 @@ async def run_basic_test(
                     
                     if not generate_response.success:
                         logger.error(f"用户 {user_id} 为章纲句 {sentence_id} 生成正文失败")
+                        logger.error(f"错误信息: {generate_response.error}")
                         continue
                     
                     generated_text = generate_response.data.get("content", "")

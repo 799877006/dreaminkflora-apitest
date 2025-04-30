@@ -21,7 +21,7 @@ class ApiResponse(BaseModel):
 
 class TokenStreamEvent(BaseModel):
     """流式令牌事件模型"""
-    event_type: str = Field(..., description="事件类型: token, done, error等")
+    event_type: str = Field(..., description="事件类型: token, finish, error等")
     data: Optional[Dict[str, Any]] = Field(None, description="事件数据")
 
 

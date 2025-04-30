@@ -76,6 +76,7 @@ class BookClient(LlmApiClient):
                     logger.warning("书籍创建成功，但未返回bookId")
         elif response.error:
             logger.error(f"创建书籍失败: {response.error.status_code} - {response.error.message}")
+            logger.error(f"创建书籍失败: {response}")
         else:
             logger.error("创建书籍失败: 未知错误或无响应内容")
 
@@ -507,7 +508,14 @@ class BookClient(LlmApiClient):
             if event.event_type == "token" and event.data:
                 token = event.data.get("token", "")
                 complete_text += token
-                
+            
+            elif event.event_type == "finish":
+                logger.info(f"章纲句生成正文完成,链接关闭")
+                return ApiResponse(
+                    success=True,
+                    data={"content": complete_text}
+                )
+            
             elif event.event_type == "error":
                 logger.error(f"根据章纲句生成正文出错: {event.data}")
                 return ApiResponse(

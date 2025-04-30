@@ -353,7 +353,7 @@ class LlmApiClient:
                     token_count=total_tokens
                 )
             
-            yield TokenStreamEvent(event_type="done")
+            yield TokenStreamEvent(event_type="finish")
                 
         except Exception as e:
             logger.error(f"处理流式响应出错: {str(e)}")

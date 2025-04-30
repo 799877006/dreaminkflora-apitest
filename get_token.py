@@ -12,7 +12,7 @@ password = "Pwd@1234"
 
 # 手机号范围 (19999998000 到 19999999999，共2000个)
 start_phone = 19999998000
-end_phone = 19999998000
+end_phone = 19999998000 + 1999
 
 # CSV文件路径
 csv_file = "api_test_project/access_tokens.csv"
