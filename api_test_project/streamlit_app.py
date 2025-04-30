@@ -131,7 +131,7 @@ with st.sidebar:
     tokens_file = st.text_input("令牌文件路径", "access_tokens.csv")
     
     # API基础URL
-    api_url = st.text_input("API基础URL", "https://server.dreaminkflora.com/api/v1/")
+    api_url = st.text_input("API基础URL", "https://server2.dreaminkflora.com/api/v1/")
     
     # 基础测试参数
     if test_type == "基础测试":

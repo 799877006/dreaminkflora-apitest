@@ -33,7 +33,7 @@ def basic(
     tokens_file: str = typer.Option("access_tokens.csv", "--tokens", "-t", help="访问令牌CSV文件路径"),
     concurrent_users: int = typer.Option(10, "--users", "-u", help="并发用户数"),
     test_duration: int = typer.Option(60, "--duration", "-d", help="测试持续时间(秒)"),
-    api_url: str = typer.Option("https://server.dreaminkflora.com/api/v1", "--api-url", help="API基础URL")
+    api_url: str = typer.Option("https://server2.dreaminkflora.com/api/v1", "--api-url", help="API基础URL")
 ):
     """
     执行基础测试，使用内置API客户端
@@ -126,7 +126,7 @@ def ramp_up(
     max_users: int = typer.Option(2000, "--max", "-m", help="最大用户数"),
     step: int = typer.Option(100, "--step", help="每步增加的用户数"),
     step_duration: int = typer.Option(60, "--step-duration", "-d", help="每步持续时间(秒)"),
-    api_url: str = typer.Option("https://server.dreaminkflora.com/api/v1", "--api-url", help="API基础URL")
+    api_url: str = typer.Option("https://server2.dreaminkflora.com/api/v1", "--api-url", help="API基础URL")
 ):
     """
     执行渐进式加载测试
@@ -208,7 +208,7 @@ def spike(
     users: int = typer.Option(1000, "--users", "-u", help="峰值用户数"),
     spawn_rate: int = typer.Option(100, "--spawn-rate", "-r", help="每秒新增用户数"),
     duration: int = typer.Option(300, "--duration", "-d", help="测试持续时间(秒)"),
-    api_url: str = typer.Option("https://server.dreaminkflora.com/api/v1", "--api-url", help="API基础URL")
+    api_url: str = typer.Option("https://server2.dreaminkflora.com/api/v1", "--api-url", help="API基础URL")
 ):
     """
     执行峰值压力测试
@@ -250,7 +250,7 @@ def soak(
     tokens_file: str = typer.Option("access_tokens.csv", "--tokens", "-t", help="访问令牌CSV文件路径"),
     users: int = typer.Option(500, "--users", "-u", help="并发用户数"),
     duration: str = typer.Option("4h", "--duration", "-d", help="测试持续时间(例如:4h)"),
-    api_url: str = typer.Option("https://server.dreaminkflora.com/api/v1", "--api-url", help="API基础URL")
+    api_url: str = typer.Option("https://server2.dreaminkflora.com/api/v1", "--api-url", help="API基础URL")
 ):
     """
     执行持久性能测试

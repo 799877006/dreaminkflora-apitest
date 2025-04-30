@@ -32,7 +32,7 @@
 
 ## 1. LLM API测试准备
 
-- **API文档分析:** 深入分析 [Dreaminkflora API](https://server.dreaminkflora.com/api/v1/) 的接口规范和用法。
+- **API文档分析:** 深入分析 [Dreaminkflora API](https://server2.dreaminkflora.com/api/v1/) 的接口规范和用法。
 - **认证准备:** 使用access_tokens.csv中的用户凭证进行API调用，确保授权正确。
 - **测试数据准备:** 建立测试数据集，包括各类小说类型、章节内容等。
 - **测试环境隔离:** 确保测试环境与生产环境隔离，避免影响真实用户。

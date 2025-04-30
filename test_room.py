@@ -2,7 +2,7 @@ import requests
 import csv
 
 # 基础API地址
-base_url = "https://server.dreaminkflora.com/api/v1"
+base_url = "https://server2.dreaminkflora.com/api/v1"
 room_id = 66 
 
 tokens = []

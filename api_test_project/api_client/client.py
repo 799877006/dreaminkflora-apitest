@@ -24,7 +24,7 @@ from api_test_project.models.response_models import (
 
 class ApiClientConfig(BaseModel):
     """API客户端配置"""
-    base_url: str = "https://server.dreaminkflora.com/api/v1/"
+    base_url: str = "https://server2.dreaminkflora.com/api/v1/"
     timeout: float = 60.0  # 默认超时时间（秒）
     max_retries: int = 3   # 最大重试次数
     retry_delay: float = 1.0  # 重试间隔（秒）
@@ -178,6 +178,7 @@ class LlmApiClient:
         first_byte_time = None
         
         try:
+            # 发送请求
             response = await client.request(
                 method=method,
                 url=url,
